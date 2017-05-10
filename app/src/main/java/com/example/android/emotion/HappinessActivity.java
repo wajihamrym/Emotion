@@ -14,7 +14,7 @@ public class HappinessActivity extends EmotionBaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_emotion_happiness);
 
-        initTextSwitchers(this);
+        initAnimation();
         loadJsonFromAsset(this.getApplicationContext(), "happinessQuotes.json");
 
         displayQuote();

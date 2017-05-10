@@ -17,7 +17,7 @@ public class LoveActivity extends EmotionBaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_emotion_love);
 
-        initTextSwitchers(this);
+        initAnimation();
         loadJsonFromAsset(this.getApplicationContext(), "loveQuotes.json");
 
         displayQuote();

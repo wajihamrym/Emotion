@@ -10,7 +10,7 @@ public class SadnessActivity extends EmotionBaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_emotion_sadness);
 
-        initTextSwitchers(this);
+        initAnimation();
         loadJsonFromAsset(this.getApplicationContext(), "sadnessQuotes.json");
 
         displayQuote();

@@ -47,7 +47,7 @@
             android:layout_marginRight="20dp"
             android:scaleType="centerCrop"
             android:background="@android:color/transparent"
-            android:src="@drawable/funny"
+            android:src="@drawable/happiness"
             android:onClick="showHappiness"/>
 
         <ImageButton
@@ -56,7 +56,7 @@
             android:layout_marginRight="20dp"
             android:scaleType="centerCrop"
             android:background="@android:color/transparent"
-            android:src="@drawable/sad"
+            android:src="@drawable/sadness"
             android:onClick="showSadness"/>
 
     </LinearLayout>
