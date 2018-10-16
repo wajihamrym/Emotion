@@ -10,7 +10,22 @@
   },
 
   {
-    "quote":"Some cause happiness wherever they go; others whenever they go.",
+    "quote": "Some cause happiness wherever they go; others whenever they go.",
     "author": "Oscar Wilde"
+  },
+
+  {
+    "quote": "Don’t underestimate the value of Doing Nothing, of just going along, listening to all the things you can’t hear, and not bothering.",
+    "author": "Winnie the Pooh"
+  },
+
+  {
+    "quote": "A table, a chair, a bowl of fruit and a violin; what else does a man need to be happy?",
+    "author": "Albert Einstein"
+  },
+
+  {
+    "quote": "It was only a sunny smile, and little it cost in the giving, but like morning light it scattered the night and made the day worth living.",
+    "author": "F. Scott Fitzgerald"
   }
   ]
