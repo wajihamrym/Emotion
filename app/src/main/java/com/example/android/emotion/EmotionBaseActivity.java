@@ -2,12 +2,16 @@ package com.example.android.emotion;
 import android.app.Activity;
 import android.content.Context;
 import android.support.v4.view.MotionEventCompat;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.TextView;
 
 import com.example.android.utilities.NumUtilities;
+import com.squareup.moshi.JsonAdapter;
+import com.squareup.moshi.Moshi;
+import com.squareup.moshi.Types;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -17,7 +21,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.List;
+
+import okio.Okio;
 
 /**
  * Created by wajiha on 2017-04-18.
@@ -29,54 +37,36 @@ public abstract class EmotionBaseActivity extends Activity {
 
     Animation in;
     Animation out;
-    String json = null;
-    final ArrayList<Quote> quoteList = new ArrayList<Quote>();
-
+    protected List<Quote> quoteList = new ArrayList<Quote>();
+    private static final String TAG = "SM_ErrorLog";
     //variables for storing pointer location
     float x1 = 0;
     float x2 = 0;
 
     private int previousQuoteIndex = 0;
-    /**
-     * Reads JSON file of quotes/authors and stores them into an ArrayList
-     *
-     * @param emotion type
-     */
-    public void loadJsonFromAsset(Context context, String emotion) {
-        String json = null;
-        //creates a variable-length string
-        StringBuilder stringBuilder = new StringBuilder();
-        try {
-            InputStream is = context.getAssets().open(emotion);
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(is));
 
-            String line;
-            while ((line = bufferedReader.readLine()) != null) {
-                stringBuilder.append(line);
-            }
 
-            bufferedReader.close();
-            json = stringBuilder.toString();
-        } catch (IOException e) {
-            e.printStackTrace();
+    public boolean populateQuotes(Context context, String emotion) {
+        InputStream assetInputStream = null;
+
+        try{
+            //assetInputStream = getApplicationContext().getAssets().open(emotion);
+            assetInputStream = getAssets().open(emotion);
         }
-
+        catch(IOException e) {
+            Log.e(TAG, "Could not open quotes JSON file", e);
+            return false;
+        }
+        Moshi moshi = new Moshi.Builder().build();
+        Type type = Types.newParameterizedType(List.class, Quote.class);
+        JsonAdapter<List> adapter = moshi.adapter(type);
         try {
-            JSONArray mainNode = new JSONArray(json);
-
-            for (int i = 0; i < mainNode.length(); i++) {
-
-                JSONObject quote = mainNode.getJSONObject(i);
-                //appending a new row to arraylist
-                Quote temp = new Quote();
-                temp.setAuthor(quote.getString("author"));
-                temp.setQuote(quote.getString("quote"));
-                quoteList.add(temp);
-
-            }
-
-        } catch (JSONException e) {
-            e.printStackTrace();
+            quoteList = adapter.fromJson(Okio.buffer(Okio.source(assetInputStream)));
+            return true;
+        }
+        catch(IOException e) {
+            Log.e(TAG, "Could not parse JSON file", e);
+            return false;
         }
     }
 
@@ -107,6 +97,7 @@ public abstract class EmotionBaseActivity extends Activity {
      *
      * @param event
      */
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
 
