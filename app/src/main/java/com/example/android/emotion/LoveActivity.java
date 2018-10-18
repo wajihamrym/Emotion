@@ -12,7 +12,7 @@ public class LoveActivity extends EmotionBaseActivity {
         setContentView(R.layout.activity_emotion_love);
 
         initAnimation();
-        populateQuotes(this, "loveQuotes.json");
+        populateQuotes("loveQuotes.json");
         displayQuote();
     }
 }

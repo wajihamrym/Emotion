@@ -1,6 +1,5 @@
 package com.example.android.emotion;
 import android.app.Activity;
-import android.content.Context;
 import android.support.v4.view.MotionEventCompat;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -13,14 +12,8 @@ import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
 import com.squareup.moshi.Types;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,23 +28,32 @@ import okio.Okio;
 
 public abstract class EmotionBaseActivity extends Activity {
 
-    Animation in;
-    Animation out;
-    protected List<Quote> quoteList = new ArrayList<Quote>();
     private static final String TAG = "SM_ErrorLog";
-    //variables for storing pointer location
-    float x1 = 0;
-    float x2 = 0;
+    // Arbitrarily determined the appropriate threshold
+    // for detecting user swipe on the screen
+    private static final int SWIPE_THRESHOLD = 150;
+    private static final int ANIMATION_DURATION_MS = 300;
 
+    private Animation in;
+    private Animation out;
+    // Variables for storing pointer location
+    private float fingerDownCoordinates = 0;
+    private float fingerUpCoordinates = 0;
     private int previousQuoteIndex = 0;
 
+    protected List<Quote> quoteList = new ArrayList<>();
 
-    public boolean populateQuotes(Context context, String emotion) {
+    /**
+     * Reads quotes from a JSON file, deserializes it and populates
+     * a list of Quote objects.
+     * @param emotionFile JSON filename containing list of quotes
+     * @return indication of whether quotes were processed successfully
+     */
+    public boolean populateQuotes(String emotionFile) {
         InputStream assetInputStream = null;
 
-        try{
-            //assetInputStream = getApplicationContext().getAssets().open(emotion);
-            assetInputStream = getAssets().open(emotion);
+        try {
+            assetInputStream = getAssets().open(emotionFile);
         }
         catch(IOException e) {
             Log.e(TAG, "Could not open quotes JSON file", e);
@@ -93,7 +95,8 @@ public abstract class EmotionBaseActivity extends Activity {
 
 
     /**
-     * onTouchEvent determines if a right to left swipe has been performed and changes quote displayed accordingly
+     * onTouchEvent determines if a right to left swipe has been performed
+     * and changes quote displayed accordingly
      *
      * @param event
      */
@@ -110,15 +113,20 @@ public abstract class EmotionBaseActivity extends Activity {
             case MotionEvent.ACTION_DOWN:
                 resetCoordinates();
 
-                x1 = event.getX();
+                // Record the coordinates of the location where the user has started the swipe
+                fingerDownCoordinates = event.getX();
                 break;
 
             case MotionEvent.ACTION_UP:
-                x2 = event.getX();
-                deltaX = x2 - x1;
+                // Detect the coordinates of the location where the swipe has ended and calculate
+                // the distance covered by the swipe. If it exceeds a certain threshold, a new quote
+                // will be displayed.
+                fingerUpCoordinates = event.getX();
+                deltaX = fingerUpCoordinates - fingerDownCoordinates;
 
-                if (Math.abs(deltaX)>150) {
-                    if (x2 < x1) {
+                if (Math.abs(deltaX) > SWIPE_THRESHOLD) {
+                    // Only allow swipes from right to left
+                    if (fingerUpCoordinates < fingerDownCoordinates) {
                         final TextView quoteTextView = (TextView) this.findViewById(R.id.quote_text_view);
                         final TextView authorTextView = (TextView) this.findViewById(R.id.author_text_view);
 
@@ -156,16 +164,16 @@ public abstract class EmotionBaseActivity extends Activity {
     }
 
     private void resetCoordinates() {
-        x1 = 0;
-        x2 = 0;
+        fingerDownCoordinates = 0;
+        fingerUpCoordinates = 0;
     }
 
     protected void initAnimation() {
         in = new AlphaAnimation(0.0f, 1.0f);
-        in.setDuration(300);
+        in.setDuration(ANIMATION_DURATION_MS);
 
         out = new AlphaAnimation(1.0f, 0.0f);
-        out.setDuration(300);
+        out.setDuration(ANIMATION_DURATION_MS);
 
 
     }

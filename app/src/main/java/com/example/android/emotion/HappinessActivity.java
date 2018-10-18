@@ -15,7 +15,7 @@ public class HappinessActivity extends EmotionBaseActivity {
         setContentView(R.layout.activity_emotion_happiness);
 
         initAnimation();
-        populateQuotes(this, "happinessQuotes.json");
+        populateQuotes("happinessQuotes.json");
         displayQuote();
     }
 }

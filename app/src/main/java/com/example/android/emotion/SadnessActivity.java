@@ -10,7 +10,7 @@ public class SadnessActivity extends EmotionBaseActivity {
         setContentView(R.layout.activity_emotion_sadness);
 
         initAnimation();
-        populateQuotes(this, "sadnessQuotes.json");
+        populateQuotes("sadnessQuotes.json");
         displayQuote();
     }
 }
