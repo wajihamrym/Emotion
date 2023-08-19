@@ -2,10 +2,6 @@ package com.example.android.emotion;
 
 import android.os.Bundle;
 
-/**
- * Created by wajiha on 2017-05-02.
- */
-
 public class HappinessActivity extends EmotionBaseActivity {
 
     @Override

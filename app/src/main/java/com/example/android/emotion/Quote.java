@@ -2,10 +2,6 @@ package com.example.android.emotion;
 
 import static android.R.attr.author;
 
-/**
- * Created by wajiha on 2017-01-27.
- */
-
 public class Quote {
 
     private String author;

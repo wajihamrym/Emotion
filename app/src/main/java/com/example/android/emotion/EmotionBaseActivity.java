@@ -20,12 +20,6 @@ import java.util.List;
 
 import okio.Okio;
 
-/**
- * Created by wajiha on 2017-04-18.
- */
-
-
-
 public abstract class EmotionBaseActivity extends Activity {
 
     private static final String TAG = "SM_ErrorLog";
@@ -41,7 +35,7 @@ public abstract class EmotionBaseActivity extends Activity {
     private float fingerUpCoordinates = 0;
     private int previousQuoteIndex = 0;
 
-    protected List<Quote> quoteList = new ArrayList<>();
+    protected List<Quote> quoteList;
 
     /**
      * Reads quotes from a JSON file, deserializes it and populates
